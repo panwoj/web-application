@@ -18,6 +18,8 @@ public class TaskController {
     @Autowired
     private TaskMapper taskMapper;
 
+    @CrossOrigin(origins = "*")
+
     @RequestMapping(method = RequestMethod.GET, value = "getTasks")
     public List<TaskDto> getTasks() {
         return taskMapper.mapToTaskDtoList(service.getAllTasks());
