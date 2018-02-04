@@ -8,7 +8,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +31,14 @@ public class TrelloClient {
     @Autowired
     private RestTemplate restTemplate;
 
+    public List<Optional<TrelloBoardDto>> getTrelloBoards() {
+        TrelloBoardDto[] boardsResponse = restTemplate.getForObject(buildUrl(), TrelloBoardDto[].class);
+        List<Optional<TrelloBoardDto>> boardsList = Arrays.asList(boardsResponse).stream()
+                .map(Optional::ofNullable)
+                .collect(Collectors.toList());
+        return boardsList;
+    }
+
     private URI buildUrl() {
         URI url = UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/pan_woj/boards")
                 .queryParam("key", trelloAppKey)
@@ -41,11 +48,7 @@ public class TrelloClient {
         return url;
     }
 
-    public Optional<List<TrelloBoardDto>> getTrelloBoards() {
-        TrelloBoardDto[] boardsResponse = restTemplate.getForObject(buildUrl(), TrelloBoardDto[].class);
-        List<TrelloBoardDto> boardsList = Arrays.asList(boardsResponse);
-        return Optional.ofNullable(boardsList);
-    }
+
 
 
 }
