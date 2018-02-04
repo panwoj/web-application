@@ -1,6 +1,8 @@
 package com.crud.tasks.trello.client;
 
+import com.crud.tasks.domain.CreatedTrelloCard.CreatedTrelloCard;
 import com.crud.tasks.domain.TrelloBoardDto;
+import com.crud.tasks.domain.TrelloCardDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,23 +34,33 @@ public class TrelloClient {
     private RestTemplate restTemplate;
 
     public List<Optional<TrelloBoardDto>> getTrelloBoards() {
-        TrelloBoardDto[] boardsResponse = restTemplate.getForObject(buildUrl(), TrelloBoardDto[].class);
+        TrelloBoardDto[] boardsResponse = restTemplate.getForObject(buildUrlForGetTrelloBoards(), TrelloBoardDto[].class);
         List<Optional<TrelloBoardDto>> boardsList = Arrays.asList(boardsResponse).stream()
                 .map(Optional::ofNullable)
                 .collect(Collectors.toList());
         return boardsList;
     }
 
-    private URI buildUrl() {
+    public CreatedTrelloCard createNewCard(TrelloCardDto trelloCardDto) {
+
+        URI url = UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/cards")
+                .queryParam("name", trelloCardDto.getName())
+                .queryParam("desc", trelloCardDto.getDescription())
+                .queryParam("pos",trelloCardDto.getPos())
+                .queryParam("idList", trelloCardDto.getListId())
+                .queryParam("key", trelloAppKey)
+                .queryParam("token", trelloToken).build().encode().toUri();
+
+        return restTemplate.postForObject(url, null, CreatedTrelloCard.class);
+    }
+
+    private URI buildUrlForGetTrelloBoards() {
         URI url = UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/pan_woj/boards")
                 .queryParam("key", trelloAppKey)
                 .queryParam("token", trelloToken)
-                .queryParam("fields", "name,id").build().encode().toUri();
+                .queryParam("fields", "name,id")
+                .queryParam("lists", "all").build().encode().toUri();
 
         return url;
     }
-
-
-
-
 }
