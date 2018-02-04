@@ -10,10 +10,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class TrelloClient {
@@ -33,11 +33,11 @@ public class TrelloClient {
     @Autowired
     private RestTemplate restTemplate;
 
-    public List<Optional<TrelloBoardDto>> getTrelloBoards() {
-        TrelloBoardDto[] boardsResponse = restTemplate.getForObject(buildUrlForGetTrelloBoards(), TrelloBoardDto[].class);
-        List<Optional<TrelloBoardDto>> boardsList = Arrays.asList(boardsResponse).stream()
-                .map(Optional::ofNullable)
-                .collect(Collectors.toList());
+    public List<TrelloBoardDto> getTrelloBoards() {
+        TrelloBoardDto[] boardsResponse =
+                restTemplate.getForObject(buildUrlForGetTrelloBoards(), TrelloBoardDto[].class);
+        List<TrelloBoardDto> boardsList =
+                Arrays.asList(Optional.ofNullable(boardsResponse).orElse(new TrelloBoardDto[0]));
         return boardsList;
     }
 
