@@ -3,6 +3,8 @@ package com.crud.tasks.trello.mapper;
 import com.crud.tasks.domain.*;
 import com.crud.tasks.mapper.TrelloMapper;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -28,17 +30,16 @@ public class TrelloMapperTest {
     private TrelloCardDto trelloCardDto;
 
     @InjectMocks
-    TrelloMapper trelloMapper;
+    private TrelloMapper trelloMapper;
 
-    private List<TrelloListDto> trelloListDtoList = new ArrayList<>();
-    private List<TrelloBoardDto> trelloBoardDtoList = new ArrayList<>();
 
-    private List<TrelloList> trelloLists = new ArrayList<>();
-    private List<TrelloBoard> trelloBoards = new ArrayList<>();
+
 
     @Test
     public void testMapToBoards() {
         //Given
+        List<TrelloListDto> trelloListDtoList = new ArrayList<>();
+        List<TrelloBoardDto> trelloBoardDtoList = new ArrayList<>();
         trelloListDtoList.add(trelloListDto);
         trelloBoardDtoList.add(new TrelloBoardDto("1", "name", trelloListDtoList));
         //When
@@ -52,6 +53,8 @@ public class TrelloMapperTest {
     @Test
     public void testMapToBoardsDto() {
         //Given
+        List<TrelloList> trelloLists = new ArrayList<>();
+        List<TrelloBoard> trelloBoards = new ArrayList<>();
         trelloLists.add(trelloList);
         trelloBoards.add(new TrelloBoard("1", "name", trelloLists));
         //When
@@ -65,6 +68,7 @@ public class TrelloMapperTest {
     @Test
     public void testMapToList() {
         //Given
+        List<TrelloListDto> trelloListDtoList = new ArrayList<>();
         trelloListDtoList.add(trelloListDto);
         //When
         List<TrelloList> trelloLists = trelloMapper.mapToList(trelloListDtoList);
@@ -77,6 +81,7 @@ public class TrelloMapperTest {
     @Test
     public void testMapToListDto() {
         //Given
+        List<TrelloList> trelloLists = new ArrayList<>();
         trelloLists.add(trelloList);
         //When
         List<TrelloListDto> trelloListsDto = trelloMapper.mapToListDto(trelloLists);
