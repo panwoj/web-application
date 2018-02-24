@@ -29,7 +29,6 @@ public class TrelloController {
     @CrossOrigin(origins = "*")
     @RequestMapping(method = RequestMethod.POST, value = "createTrelloCard")
     public CreatedTrelloCardDto createTrelloCard(@RequestBody TrelloCardDto trelloCardDto) {
-
         return trelloFacade.createCard(trelloCardDto);
     }
 
