@@ -1,8 +1,7 @@
 package com.crud.tasks.controller;
 
-import com.crud.tasks.domain.TrelloBoard;
 import com.crud.tasks.domain.TrelloBoardDto;
-import com.crud.tasks.service.TrelloService;
+import com.crud.tasks.domain.TrelloListDto;
 import com.crud.tasks.trello.facade.TrelloFacade;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,9 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,9 +33,6 @@ public class TrelloControllerTest {
     @MockBean
     private TrelloFacade trelloFacade;
 
-    @MockBean
-    private TrelloService trelloService;
-
     @Test
     public void shouldFetchEmptyTrelloBoards() throws Exception {
         //Given
@@ -43,8 +40,35 @@ public class TrelloControllerTest {
         when(trelloFacade.fetchTrelloBoards()).thenReturn(trelloBoards);
         //When & Then
         mockMvc.perform(get("/v1/trello/getTrelloBoards").contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void  shouldFetchTrelloBoards() throws Exception {
+        //Given
+        List<TrelloListDto> trelloLists = new ArrayList<>();
+        trelloLists.add(new TrelloListDto("1", "Test List", false));
+
+        List<TrelloBoardDto> trelloBoards = new ArrayList<>();
+        trelloBoards.add(new TrelloBoardDto("1", "Test Task", trelloLists));
+        System.out.println(trelloBoards.size());
+
+        when(trelloFacade.fetchTrelloBoards()).thenReturn(trelloBoards);
+        //When & Then
+        mockMvc.perform(get("/v1/trello/getTrelloBoards").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                // Trello board fields
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].name", is("Test Task")))
+                // Trello list fields
+                .andExpect(jsonPath("$[0].lists", hasSize(1)))
+                .andExpect(jsonPath("$[0].lists.id", is("1")))
+                .andExpect(jsonPath("$[0].lists.name", is("Test List")))
+                .andExpect(jsonPath("$[0].lists.closed", is(false)));
     }
 
 }

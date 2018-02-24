@@ -4,6 +4,7 @@ import com.crud.tasks.domain.CreatedTrelloCard.CreatedTrelloCardDto;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
 import com.crud.tasks.service.TrelloService;
+import com.crud.tasks.trello.facade.TrelloFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +16,12 @@ import java.util.stream.Collectors;
 public class TrelloController {
 
     @Autowired
-    private TrelloService trelloService;
+    private TrelloFacade trelloFacade;
 
     @CrossOrigin(origins = "*")
     @RequestMapping(method = RequestMethod.GET, value = "getTrelloBoards")
     public List<TrelloBoardDto> getTrelloBoards() {
-        return trelloService.fetchTrelloBoards().stream()
+        return trelloFacade.fetchTrelloBoards().stream()
                 .filter(b -> b.getName().contains("Kodilla") && b.getId() != null)
                 .collect(Collectors.toList());
     }
@@ -29,7 +30,7 @@ public class TrelloController {
     @RequestMapping(method = RequestMethod.POST, value = "createTrelloCard")
     public CreatedTrelloCardDto createTrelloCard(@RequestBody TrelloCardDto trelloCardDto) {
 
-        return trelloService.createdTrelloCard(trelloCardDto);
+        return trelloFacade.createCard(trelloCardDto);
     }
 
 
