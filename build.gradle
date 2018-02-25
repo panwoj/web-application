@@ -36,7 +36,7 @@ dependencies {
 	compile('mysql:mysql-connector-java')
 	compile('org.springframework.boot:spring-boot-starter-mail:1.5.10.RELEASE')
 	compile('com.google.code.gson:gson:2.8.2')
-	compile('org.springframework.boot:spring-boot-starter-actuator:1.5.10.')
+	compile('org.springframework.boot:spring-boot-starter-actuator')
 //	compile('org.postgresql:postgresql')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
