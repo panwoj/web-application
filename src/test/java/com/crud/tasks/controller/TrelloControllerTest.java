@@ -2,11 +2,9 @@ package com.crud.tasks.controller;
 
 import com.crud.tasks.domain.CreatedTrelloCard.CreatedTrelloCardDto;
 import com.crud.tasks.domain.TrelloBoardDto;
-import com.crud.tasks.domain.TrelloCard;
 import com.crud.tasks.domain.TrelloCardDto;
 import com.crud.tasks.domain.TrelloListDto;
 import com.crud.tasks.trello.facade.TrelloFacade;
-import com.google.common.base.Utf8;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
