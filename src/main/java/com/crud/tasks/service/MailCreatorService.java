@@ -34,6 +34,7 @@ public class MailCreatorService {
 
         Context context = new Context();
         context.setVariable("message", message);
+        context.setVariable("short_message", "PREVIEW: " + message.substring(0, 10) + "...");
         context.setVariable("tasks_url", "http://localhost:8888/crud");
         context.setVariable("button", "Visit website");
         context.setVariable("tasks_url_trello", "https://trello.com");
@@ -45,6 +46,11 @@ public class MailCreatorService {
         context.setVariable("application_functionality", functionality);
         context.setVariable("application_functionality_database", seeTasks);
         context.setVariable("see_you", "See you next day!");
+        context.setVariable("goodbye", "Bye!");
+        context.setVariable("company_name", adminConfig.getCompanyName());
+        context.setVariable("company_phone", adminConfig.getCompanyPhone());
+        context.setVariable("company_mail", adminConfig.getCompanyEmail());
+        context.setVariable("admin_config", adminConfig);
 
         if (message.substring(0,8).equals("New card")) {
             return templateEngine.process("mail/created-trello-card-mail", context);
