@@ -22,7 +22,7 @@ public class TrelloController {
     @RequestMapping(method = RequestMethod.GET, value = "/boards")
     public List<TrelloBoardDto> getTrelloBoards() {
         return trelloFacade.fetchTrelloBoards().stream()
-                .filter(b -> b.getName().contains("Kodilla") && b.getId() != null)
+                .filter(b -> b.getName().contains("Kodilla Application") && b.getId() != null)
                 .collect(Collectors.toList());
     }
 
